@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Domov{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ravnanje z odpadki – Informativna stran</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+    header { background: #0d5e3a; color: white; padding: 20px; }
+    header h1 { margin: 0; }
+    nav ul { list-style: none; padding: 0; margin: 10px 0 0 0; display: flex; gap: 20px; }
+    nav a { color: white; text-decoration: none; }
+    main { padding: 20px; max-width: 900px; margin: auto; }
+    section { margin-bottom: 40px; }
+    section img { width: 100%; border-radius: 8px; margin: 15px 0; }
+    footer { background: #eee; padding: 20px; text-align: center; }
+  </style>
+</head>
+
+<body>
+
+
+<main>
+
+  <!-- UVOD -->
+  <section id="uvod">
+    <h2>Stanje odpadkov v Sloveniji</h2>
+
+    <img src="https://img.magnific.com/premium-photo/paper-recycling-symbol-green-background_1286611-18276.jpg?w=740" 
+         alt="Simbol za recikliranje">
+
+    <p>Enako kot po vsem svetu tudi pri nas količina odpadkov narašča. 
+       V povprečju ustvarimo v Sloveniji nekaj več kot 8 milijonov ton odpadkov na leto, 
+       od tega več kot milijon ton komunalnih, kar znese 495 kilogramov na prebivalca.</p>
+
+    <p>Med komunalnimi odpadki je za 6.700 ton nevarnih komunalnih odpadkov, 
+       vendar nam uspeva to količino zmanjševati.</p>
+
+    <p>Večina komunalnih odpadkov je v preteklosti končala na odlagališčih. 
+       S spremembo zakonodaje, političnimi instrumenti in vzpostavitvijo 
+       centrov za ravnanje s komunalnimi odpadki smo trend obrnili. 
+       Delež ločeno zbranih odpadkov ter stopnja recikliranja vztrajno naraščata.</p>
+  </section>
+
+  <!-- KAJ JE ODPADek -->
+  <section id="kaj-je-odpadek">
+    <h2>Kaj je odpadek?</h2>
+
+    <img src="https://podcrto.si/app/uploads/2016/05/smeti-960x720.png" 
+         alt="Zabojniki za ločevanje odpadkov">
+
+    <p>Odpadek je snov ali predmet, ki ga imetnik zavrže, namerava zavreči ali mora zavreči. 
+       Delimo jih na komunalne, industrijske, gradbene in odpadke iz rudarstva.</p>
+
+    <p>Odpadki predstavljajo okoljski problem, zato si prizadevamo zmanjšati njihove škodljive 
+       vplive na zdravje ljudi in okolje ter obenem zmanjševati rabo virov.</p>
+  </section>
+
+  <!-- RAVNANJE Z ODPADKI -->
+  <section id="ravnanje">
+    <h2>Zakaj ravnamo z odpadki?</h2>
+
+    <img src="https://www.zelenaljubljana.si/wp-content/uploads/2020/07/recikliranje-odpadkov.jpg" 
+         alt="Ravnanje z odpadki in recikliranje">
+
+    <p>Ravnanje z odpadki vključuje zbiranje, prevoz, predelavo (vključno s sortiranjem) 
+       in odstranjevanje odpadkov ter nadzor teh postopkov. Sem spada tudi upravljanje naprav za 
+       obdelavo ali odstranjevanje odpadkov.</p>
+
+    <p>Učinkovito ravnanje lahko pomembno prispeva k učinkoviti rabi virov in je ključno za 
+       trajnostni razvoj družbe.</p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Vir besedila: GOV.SI – Ravnanje z odpadki</p>
+</footer>
+
+</body>
+</html>
+{% endblock %}

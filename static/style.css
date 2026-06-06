@@ -1,0 +1,30 @@
+/* Zeleno–rjava tema */
+.bg-green-brown {
+    background: linear-gradient(90deg, #4b6b3c, #6e4d2c);
+}
+
+body {
+    background-color: #f7f5ef;
+}
+
+h1, h2 {
+    color: #4b6b3c;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 2px solid #555;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+tbody tr:nth-child(even) {
+    background-color: #d4ddcf;
+}

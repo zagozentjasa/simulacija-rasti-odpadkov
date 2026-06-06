@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Monte Carlo napoved rasti odpadkov</h2>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<div style="display:flex; flex-wrap:wrap; gap:20px; margin-bottom:20px;">
+    <div>
+        <label for="obcina"><strong>Izberi občino:</strong></label>
+        <select id="obcina" onchange="loadData()">
+            {% for o in obcine %}
+            <option value="{{ o }}">{{ o }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="n_future"><strong>Število prihodnjih let:</strong> <span id="sliderValue">5</span></label><br>
+        <input type="range" id="n_future" min="1" max="10" value="5" 
+               oninput="updateSlider(this.value)" 
+               style="width:200px; accent-color: #4CAF50;">
+    </div>
+</div>
+
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
+    <!-- Klasični graf -->
+   <div style="flex:1; min-width:400px; max-height:700px;">
+    <h3>Klasični graf napovedi</h3>
+
+    <div style="position:relative; height:100%; max-height:700px;">
+        <canvas id="chart"></canvas>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+let chart;
+
+// Slider update
+function updateSlider(val) {
+    document.getElementById('sliderValue').textContent = val;
+    loadData();
+}
+
+// Naloži oba grafa
+function loadData() {
+    const obcina = document.getElementById("obcina").value;
+    const n_future = document.getElementById("n_future").value;
+
+    fetch(`/simulacija/data?obcina=${obcina}&n_future=${n_future}`)
+        .then(res => res.json())
+        .then(data => drawChart(data))
+        .catch(err => console.error("Napaka pri fetch:", err));
+
+ 
+}
+
+// Klasični graf
+function drawChart(data) {
+    const ctx = document.getElementById("chart");
+    if (chart) chart.destroy();
+    const canvasCtx = ctx.getContext('2d');
+
+    const meanData = [...Array(data.hist_values.length).fill(null), ...data.mean];
+    const upper5 = meanData.map(v => v !== null ? v * 1.05 : null);
+    const lower5 = meanData.map(v => v !== null ? v * 0.95 : null);
+
+    
+   const gradientArea = canvasCtx.createLinearGradient(0, 0, 0, 700);
+gradientArea.addColorStop(0, 'rgba(0, 150, 0, 0.45)');
+gradientArea.addColorStop(0.4, 'rgba(50, 205, 50, 0.35)');
+gradientArea.addColorStop(0.75, 'rgba(144, 238, 144, 0.20)');
+gradientArea.addColorStop(1, 'rgba(144, 238, 144, 0.05)');
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [...data.hist_years, ...data.years],
+            datasets: [
+                {
+                    label: 'Zgodovinski podatki',
+                    data: [...data.hist_values, ...Array(data.years.length).fill(null)],
+                    borderColor: '#8B4513',
+                    backgroundColor: 'rgba(139,69,19,0.1)',
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 3
+                },
+                {
+                    label: 'Povprečna napoved',
+                    data: meanData,
+                    borderColor: '#006400',
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 3
+                },
+                {
+                    label: 'Interval ±5%',
+                    data: upper5,
+                    borderColor: 'rgba(0,0,0,0)',
+                    backgroundColor: gradientArea,
+                    fill: '+1',
+                    pointRadius: 0,
+                    tension: 0.2
+                },
+                {
+                    label: 'Spodnja meja (-5%)',
+                    data: lower5,
+                    borderColor: 'rgba(0,0,0,0)',
+                    backgroundColor: 'rgba(139,69,19,0.1)',
+                    fill: false,
+                    pointRadius: 0,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+             maintainAspectRatio: false, 
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(1);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            interaction: { mode: 'nearest', intersect: false },
+            scales: {
+                x: { title: { display: true, text: 'Leto' } },
+                y: { title: { display: true, text: 'Količina odpadkov' } }
+            }
+        }
+    });
+}
+
+
+loadData();
+</script>
+
+{% endblock %}
